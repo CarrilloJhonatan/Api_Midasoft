@@ -17,6 +17,7 @@ namespace Api_Midasoft.Controllers
         {
             using (prueba_midasoftEntities db = new prueba_midasoftEntities())
             {
+
                 return db.grupo_familiar.ToList();
             }
         }
