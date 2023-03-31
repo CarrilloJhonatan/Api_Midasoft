@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Threading.Tasks;
 using DALL.Data;
 
@@ -45,8 +46,8 @@ namespace DALL.Repositories.Implements
 
         public async Task<TEntity> Update(TEntity entity)
         {
-            midasoftContext.Entry(entity).State = EntityState.Modified;
-            //universityContext.Set<TEntity>().AddOrUpdate(entity);
+            //midasoftContext.Entry(entity).State = EntityState.Modified;
+            midasoftContext.Set<TEntity>().AddOrUpdate(entity);
             await midasoftContext.SaveChangesAsync();
             return entity;
         }
