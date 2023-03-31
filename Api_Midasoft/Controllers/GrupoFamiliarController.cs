@@ -1,124 +1,142 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Data.Entity;
-//using System.Linq;
-//using System.Net;
-//using System.Net.Http;
-//using System.Web.Http;
-//using DALL;
-//using DALL.Models;
-//using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using DALL.Data;
+using DALL.Services.Implements;
+using DALL.Repositories.Implements;
+using DALL.DTOs;
+using System.Threading.Tasks;
+using AutoMapper;
+using DALL.Models;
 
-//namespace Api_Midasoft.Controllers
-//{
-//    public class GrupoFamiliarController : ApiController
-//    {
-//        // GET: api/GrupoFamiliar
-//        public IEnumerable<grupo_familiar> Get()
-//        {
-//            using (prueba_midasoftEntities db = new prueba_midasoftEntities())
-//            {
+namespace Api_Midasoft.Controllers
+{
+    public class GrupoFamiliarController : ApiController
+    {
+        private IMapper mapper;
+        private readonly grupo_familiarService grupo_FamiliarService = new grupo_familiarService(new grupo_familiarRepository(MidasoftContext.Create()));
 
-//                return db.grupo_familiar.ToList();
-//            }
-//        }
+        public GrupoFamiliarController()
+        {
+            this.mapper = WebApiApplication.mapperConfiguration.CreateMapper();
+        }
 
-//        // GET: api/GrupoFamiliar/5
-//        public string Get(int id)
-//        {
-//            return "value";
-//        }
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAll()
+        {
+            var grupofamiliar = await grupo_FamiliarService.GetAll();
+            var grupofamiliarDTO = grupofamiliar.Select(x => mapper.Map<grupo_familiarDTO>(x));
 
-//        // POST: api/GrupoFamiliar
-//        public HttpResponseMessage Post([FromBody]grupo_familiar fami)
-//        {
-//            int resp = 0;
-//            HttpResponseMessage ms = null;
-//            try
-//            {
-//                using (prueba_midasoftEntities entities = new prueba_midasoftEntities())
-//                {
-//                    if (fami.edad < 18)
-//                    {
-//                        fami.fecsys = DateTime.Now;
-//                        fami.menor_edad = "SI";
-//                        entities.Entry(fami).State = EntityState.Added;
-//                        resp = entities.SaveChanges();
-//                        ms = Request.CreateResponse(HttpStatusCode.OK, resp);
-//                    }
-//                    else
-//                    {
-//                        fami.menor_edad = "";
-//                        fami.fecha_nacimiento = null;
-//                        fami.fecsys = DateTime.Now;
-//                        entities.Entry(fami).State = EntityState.Added;
-//                        resp = entities.SaveChanges();
-//                        ms = Request.CreateResponse(HttpStatusCode.OK, resp);
-//                    }
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                ms = Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
-//            }
-//            return ms;
-//        }
+            return Ok(grupofamiliarDTO);
+        }
 
-//        // PUT: api/GrupoFamiliar/5
-//        public HttpResponseMessage Put([FromBody] grupo_familiar fami)
-//        {
-//            int resp = 0;
-//            HttpResponseMessage ms = null;
-//            try
-//            {
-//                using (prueba_midasoftEntities entities = new prueba_midasoftEntities())
-//                {
-//                    if (fami.edad < 18)
-//                    {
-//                        fami.fecsys = DateTime.Now;
-//                        fami.menor_edad = "SI";
-//                        entities.Entry(fami).State = EntityState.Modified;
-//                        resp = entities.SaveChanges();
-//                        ms = Request.CreateResponse(HttpStatusCode.OK, resp);
-//                    }
-//                    else
-//                    {
-//                        fami.menor_edad = "";
-//                        fami.fecha_nacimiento = null;
-//                        fami.fecsys = DateTime.Now;
-//                        entities.Entry(fami).State = EntityState.Modified;
-//                        resp = entities.SaveChanges();
-//                        ms = Request.CreateResponse(HttpStatusCode.OK, resp);
-//                    }
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                ms = Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
-//            }
-//            return ms;
-//        }
+        [HttpGet]
+        public async Task<IHttpActionResult> GetById(string cedula)
+        {
+            var grupofamiliar = await grupo_FamiliarService.GetById(cedula);
 
-//        // DELETE: api/GrupoFamiliar/5
-//        public HttpResponseMessage Delete([FromBody] grupo_familiar fami)
-//        {
-//            int resp = 0;
-//            HttpResponseMessage ms = null;
-//            try
-//            {
-//                using (prueba_midasoftEntities entities = new prueba_midasoftEntities())
-//                {
+            if (grupofamiliar == null)
+                return NotFound();
 
-//                        entities.Entry(fami).State = EntityState.Deleted;
-//                        resp = entities.SaveChanges();
-//                        ms = Request.CreateResponse(HttpStatusCode.OK, resp);
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                ms = Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
-//            }
-//            return ms;
-//        }
-//    }
-//}
+            var grupofamiliarDTO = mapper.Map<grupo_familiarDTO>(grupofamiliar);
+
+            return Ok(grupofamiliarDTO);
+        }
+
+        [HttpPost]
+        public async Task<IHttpActionResult> Insert(grupo_familiarDTO grupo_FamiliarDTO)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            if (grupo_FamiliarDTO.edad < 18 && grupo_FamiliarDTO.fecha_nacimiento == null)
+                return BadRequest("Es menor de edad, el campo fecha_nacimiento es Requerido");
+            try
+            {
+                var grupofamiliar = mapper.Map<grupo_familiar>(grupo_FamiliarDTO);
+                if (grupofamiliar.edad < 18)
+                {
+                    grupofamiliar.fecsys = DateTime.Now;
+                    grupofamiliar.menor_edad = "SI";
+                    grupofamiliar = await grupo_FamiliarService.Insert(grupofamiliar);
+                }
+                else
+                {
+                    grupofamiliar.menor_edad = "";
+                    grupofamiliar.fecha_nacimiento = null;
+                    grupofamiliar.fecsys = DateTime.Now;
+                    grupofamiliar = await grupo_FamiliarService.Insert(grupofamiliar);
+                }
+
+                return Ok(grupofamiliar);
+            } catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+          
+        }
+
+        [HttpPut]
+        public async Task<IHttpActionResult> Update(grupo_familiarDTO grupo_FamiliarDTO, string cedula)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            if (grupo_FamiliarDTO.edad < 18 && grupo_FamiliarDTO.fecha_nacimiento == null)
+                return BadRequest("Es menor de edad, el campo fecha_nacimiento es Requerido");
+
+            if (grupo_FamiliarDTO.cedula != cedula)
+                return BadRequest();
+            var familiar = await grupo_FamiliarService.GetById(cedula);
+
+            if (familiar == null)
+                return NotFound();
+            try
+                {
+                      var  grupofamiliar = mapper.Map<grupo_familiar>(grupo_FamiliarDTO);
+                    if (grupofamiliar.edad < 18)
+                    {
+                        grupofamiliar.fecsys = DateTime.Now;
+                        grupofamiliar.menor_edad = "SI";
+                        grupofamiliar = await grupo_FamiliarService.Update(grupofamiliar);
+                    }
+                    else
+                    {
+                        grupofamiliar.menor_edad = "";
+                        grupofamiliar.fecha_nacimiento = null;
+                        grupofamiliar.fecsys = DateTime.Now;
+                        grupofamiliar = await grupo_FamiliarService.Update(grupofamiliar);
+                    }
+
+                    return Ok(grupofamiliar);
+                }
+                catch (Exception ex)
+                {
+                    return InternalServerError(ex);
+                }
+
+        }
+
+        [HttpDelete]
+        public async Task<IHttpActionResult> Delete(string cedula)
+        {
+        
+            var familiar = await grupo_FamiliarService.GetById(cedula);
+
+            if (familiar == null)
+                return NotFound();
+            try
+            {
+                await grupo_FamiliarService.Delete(cedula);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+
+        }
+
+    }
+}
