@@ -14,6 +14,7 @@ using DALL.Models;
 
 namespace Api_Midasoft.Controllers
 {
+    [Authorize]
     public class GrupoFamiliarController : ApiController
     {
         private IMapper mapper;

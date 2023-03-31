@@ -14,6 +14,7 @@ using System.Web.Http;
 
 namespace Api_Midasoft.Controllers
 {
+    [AllowAnonymous]
     public class UsuariosController : ApiController
     {
         private IMapper mapper;
