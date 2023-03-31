@@ -24,7 +24,7 @@ namespace Api_Midasoft.Controllers
         {
             this.mapper = WebApiApplication.mapperConfiguration.CreateMapper();
         }
-
+        //Obtiene un listado de objetos de grupofamiliar
         [HttpGet]
         public async Task<IHttpActionResult> GetAll()
         {
@@ -33,7 +33,7 @@ namespace Api_Midasoft.Controllers
 
             return Ok(grupofamiliarDTO);
         }
-
+        //Obtiene un objeto de grupofamiliar por su cedula
         [HttpGet]
         public async Task<IHttpActionResult> GetById(string cedula)
         {
@@ -46,7 +46,7 @@ namespace Api_Midasoft.Controllers
 
             return Ok(grupofamiliarDTO);
         }
-
+        //Inserta un objeto de grupofamiliar
         [HttpPost]
         public async Task<IHttpActionResult> Insert(grupo_familiarDTO grupo_FamiliarDTO)
         {
@@ -78,7 +78,7 @@ namespace Api_Midasoft.Controllers
             }
           
         }
-
+        //Actualiza un objeto de grupofamiliar por medio de su cedula
         [HttpPut]
         public async Task<IHttpActionResult> Update(grupo_familiarDTO grupo_FamiliarDTO, string cedula)
         {
@@ -118,7 +118,7 @@ namespace Api_Midasoft.Controllers
                 }
 
         }
-
+        //Elimina un objeto de grupofamiliar por medio de su cedula
         [HttpDelete]
         public async Task<IHttpActionResult> Delete(string cedula)
         {

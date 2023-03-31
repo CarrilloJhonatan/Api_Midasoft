@@ -23,6 +23,7 @@ namespace Api_Midasoft.Controllers
         {
             this.mapper = WebApiApplication.mapperConfiguration.CreateMapper();
         }
+        //se manda la informacion para obtener el token y poder autenticarnos y recorre la tabla usuarios si son validos los campos para la autenticacion.
         [HttpPost]
         public async Task<IHttpActionResult> Login(usuariosDTO usuariosDTO)
         {

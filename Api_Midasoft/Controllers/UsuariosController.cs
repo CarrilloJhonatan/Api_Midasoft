@@ -25,7 +25,7 @@ namespace Api_Midasoft.Controllers
             this.mapper = WebApiApplication.mapperConfiguration.CreateMapper();
         }
 
-
+        //Obtiene un listado de objetos de usuarios
         [HttpGet]
         public async Task<IHttpActionResult> GetAll()
         {
@@ -35,6 +35,7 @@ namespace Api_Midasoft.Controllers
             return Ok(usuariosDTO);
         }
 
+        //Obtiene un objeto de usuario por su usuario
         [HttpGet]
         public async Task<IHttpActionResult> GetById(string usuario)
         {
@@ -47,7 +48,7 @@ namespace Api_Midasoft.Controllers
 
             return Ok(usuariosDTO);
         }
-
+        //Inserta un objeto de usuarios
         [HttpPost]
         public async Task<IHttpActionResult> Insert(usuariosDTO usuariosDTO)
         {
@@ -67,7 +68,7 @@ namespace Api_Midasoft.Controllers
             }
 
         }
-
+        //Actualiza un objeto de usuarios por medio de su usuario
         [HttpPut]
         public async Task<IHttpActionResult> Update(usuariosDTO usuariosDTO, string usuario)
         {
@@ -97,7 +98,7 @@ namespace Api_Midasoft.Controllers
             }
 
         }
-
+        //Elimina un objeto de usuario por medio de su usuario
         [HttpDelete]
         public async Task<IHttpActionResult> Delete(string usuario)
         {
