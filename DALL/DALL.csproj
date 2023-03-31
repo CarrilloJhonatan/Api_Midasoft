@@ -68,9 +68,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\MidasoftContext.cs" />
     <Compile Include="grupo_familiar.cs">
       <DependentUpon>prueba_midasoft.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\grupo_familiar.cs" />
+    <Compile Include="Models\usuarios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="prueba_midasoft.Context.cs">
       <AutoGen>True</AutoGen>
@@ -87,6 +90,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>prueba_midasoft.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\IGenericRepository.cs" />
+    <Compile Include="Repositories\Igrupo_familiarRepository.cs" />
+    <Compile Include="Repositories\Implements\GenericRepository.cs" />
+    <Compile Include="Repositories\Implements\grupo_familiarRepository.cs" />
+    <Compile Include="Repositories\Implements\usuariosRepository.cs" />
+    <Compile Include="Repositories\IusuariosRepository.cs" />
+    <Compile Include="Services\IGenericService.cs" />
+    <Compile Include="Services\Igrupo_familiarService.cs" />
+    <Compile Include="Services\Implements\GenericService.cs" />
+    <Compile Include="Services\Implements\grupo_familiarService.cs" />
+    <Compile Include="Services\Implements\usuariosService.cs" />
+    <Compile Include="Services\IusuariosService.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="prueba_midasoft.edmx">
@@ -115,6 +130,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DTOs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
