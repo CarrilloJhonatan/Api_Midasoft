@@ -8,7 +8,7 @@ using DALL.Data;
 
 namespace DALL.Repositories.Implements
 {
-    public class grupo_familiarRepository : GenericRepository<grupo_familiar>
+    public class grupo_familiarRepository : GenericRepository<grupo_familiar> , Igrupo_familiarRepository
     {
         public grupo_familiarRepository(MidasoftContext midasoftContext) : base(midasoftContext)
         {

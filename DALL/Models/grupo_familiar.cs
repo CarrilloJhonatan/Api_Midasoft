@@ -21,7 +21,7 @@ namespace DALL.Models
         public string parentesco { get; set; }
         public decimal edad { get; set; }
         public string menor_edad { get; set; }
-        public DateTime fecha_nacimiento { get; set; }
+        public DateTime? fecha_nacimiento { get; set; }
         public DateTime fecsys { get; set; }
     }
 }

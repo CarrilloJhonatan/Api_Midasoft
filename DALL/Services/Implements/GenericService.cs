@@ -13,9 +13,9 @@ namespace DALL.Services.Implements
             this.genericRepository = genericRepository;
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(string cedula)
         {
-            await genericRepository.Delete(id);
+            await genericRepository.Delete(cedula);
         }
 
         public async Task<IEnumerable<TEntity>> GetAll()
@@ -23,9 +23,9 @@ namespace DALL.Services.Implements
             return await genericRepository.GetAll();
         }
 
-        public async Task<TEntity> GetById(int id)
+        public async Task<TEntity> GetById(string cedula)
         {
-            return await genericRepository.GetById(id);
+            return await genericRepository.GetById(cedula);
         }
 
         public async Task<TEntity> Insert(TEntity entity)

@@ -8,7 +8,7 @@ using DALL.Repositories;
 
 namespace DALL.Services.Implements
 {
-    public class usuariosService : GenericService<usuarios>
+    public class usuariosService : GenericService<usuarios>, IusuariosService
     {
         public usuariosService(IusuariosRepository usuariosRepository) : base(usuariosRepository)
         {

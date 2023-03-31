@@ -15,9 +15,9 @@ namespace DALL.Repositories.Implements
             this.midasoftContext = midasoftContext;
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(string cedula)
         {
-            var entity = await GetById(id);
+            var entity = await GetById(cedula);
 
             if (entity == null)
                 throw new Exception("The entity is null");
@@ -31,9 +31,9 @@ namespace DALL.Repositories.Implements
             return await midasoftContext.Set<TEntity>().ToListAsync();
         }
 
-        public async Task<TEntity> GetById(int id)
+        public async Task<TEntity> GetById(string cedula)
         {
-            return await midasoftContext.Set<TEntity>().FindAsync(id);
+            return await midasoftContext.Set<TEntity>().FindAsync(cedula);
         }
 
         public async Task<TEntity> Insert(TEntity entity)

@@ -8,7 +8,7 @@ using DALL.Data;
 
 namespace DALL.Repositories.Implements
 {
-    public class usuariosRepository : GenericRepository<usuarios>
+    public class usuariosRepository : GenericRepository<usuarios>, IusuariosRepository
     {
         public usuariosRepository(MidasoftContext midasoftContext) : base(midasoftContext)
         {

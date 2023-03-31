@@ -10,6 +10,7 @@ namespace DALL.Data
 {
     public class MidasoftContext : DbContext
     {
+        private static MidasoftContext midasoftContext = null;
         public MidasoftContext()
             : base("MidasoftContext")
         {
@@ -20,6 +21,9 @@ namespace DALL.Data
 
         public static MidasoftContext Create()
         {
+            //if (midasoftContext == null)
+            //midasoftContext = new MidasoftContext();
+
             return new MidasoftContext();
         }
     }

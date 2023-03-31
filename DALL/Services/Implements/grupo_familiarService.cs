@@ -8,7 +8,7 @@ using DALL.Repositories;
 
 namespace DALL.Services.Implements
 {
-    public class grupo_familiarService : GenericService<grupo_familiar>
+    public class grupo_familiarService : GenericService<grupo_familiar>, Igrupo_familiarService
     {
         public grupo_familiarService(Igrupo_familiarRepository grupo_familiarRepository) : base(grupo_familiarRepository)
         {
