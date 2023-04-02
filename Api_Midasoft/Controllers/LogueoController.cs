@@ -3,6 +3,7 @@ using DALL.Data;
 using DALL.DTOs;
 using DALL.Repositories.Implements;
 using DALL.Services.Implements;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,35 +19,46 @@ namespace Api_Midasoft.Controllers
     {
         private IMapper mapper;
         private readonly usuariosService usuariosService = new usuariosService(new usuariosRepository(MidasoftContext.Create()));
-
+        private readonly ILogger _logger;
         public LogueoController()
         {
             this.mapper = WebApiApplication.mapperConfiguration.CreateMapper();
+            _logger = Log.Logger;
         }
+        //Peticion que manda a datos a comparar con la tabla usuario y validar si existen para generar toquen
         [HttpPost]
         public async Task<IHttpActionResult> Login(usuariosDTO usuariosDTO)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var usuarios = await usuariosService.GetAll();
-            bool credencial = false;
-            foreach (var user in usuarios)
-            {
-                if(usuariosDTO.contrasena == user.contrasena && usuariosDTO.usuario == user.usuario)
+            try {
+                var usuarios = await usuariosService.GetAll();
+                bool credencial = false;
+                foreach (var user in usuarios)
                 {
-                    credencial = true;
-                    break;
-                }  
+                    if (usuariosDTO.contrasena == user.contrasena && usuariosDTO.usuario == user.usuario)
+                    {
+                        credencial = true;
+                        break;
+                    }
+                }
+                if (credencial == true)
+                {
+                    var token = TokenGenerator.GenerateTokenJwt(usuariosDTO.usuario);
+                    _logger.Information("Petición exitosa a Login Logueo");
+                    return Ok(token);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
             }
-            if (credencial == true)
+            catch (Exception ex)
             {
-                var token = TokenGenerator.GenerateTokenJwt(usuariosDTO.usuario);
-                return Ok(token);
+                _logger.Error(ex, "Petición fallida a Login Logueo: {MensajeDeError}", ex.Message);
+                return InternalServerError(ex);
             }
-            else
-            {
-                return Unauthorized();
-            }
+
 
         }
     }

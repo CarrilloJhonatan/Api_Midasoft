@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using DALL.DTOs;
+using Serilog;
+using System.IO;
 
 namespace Api_Midasoft
 {
@@ -24,6 +26,24 @@ namespace Api_Midasoft
 
             //AutoMapper
             mapperConfiguration = MapperConfig.mapperConfiguration();
+
+
+            ///Configuracion de serilog
+            string logDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
+
+            if (!Directory.Exists(logDirectory))
+            {
+                Directory.CreateDirectory(logDirectory);
+            }
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+      .WriteTo.Map("Name", "Other", (name, wt) => wt.File(Path.Combine(logDirectory, $"log-{DateTimeOffset.Now:yyyy-MM-dd-HH-mm-ss}.txt")))
+      .CreateLogger();
+
+        }
+        protected void Application_End()
+        {
+            Log.CloseAndFlush();
         }
     }
 }
