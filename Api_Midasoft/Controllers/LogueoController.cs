@@ -50,7 +50,7 @@ namespace Api_Midasoft.Controllers
                 }
                 else
                 {
-                    _logger.Information("Petición rechazada a Update Usuarios (Usuario o Contrasena incorrectos)");
+                    _logger.Information("Petición rechazada a Login Logueo (Usuario o Contrasena incorrectos)");
                     return Unauthorized();
                 }
             }
