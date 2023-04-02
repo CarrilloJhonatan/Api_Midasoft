@@ -44,6 +44,8 @@ namespace Api_Midasoft.Controllers
                 _logger.Error(ex, "Petición fallida a GetAll Usuraios: {MensajeDeError}", ex.Message);
                 return InternalServerError(ex);
             }
+        }
+
 
         [HttpGet]
         public async Task<IHttpActionResult> GetById(string usuario)
@@ -56,8 +58,14 @@ namespace Api_Midasoft.Controllers
                     return NotFound();
 
             var usuariosDTO = mapper.Map<usuariosDTO>(usuarios);
-
-            return Ok(usuariosDTO);
+                _logger.Information("Petición exitosa a GetById Usuraios");
+                return Ok(usuariosDTO);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Petición fallida a GetById Usuraios: {MensajeDeError}", ex.Message);
+                return InternalServerError(ex);
+            }
         }
 
         [HttpPost]
