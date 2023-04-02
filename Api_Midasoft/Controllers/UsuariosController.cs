@@ -45,8 +45,6 @@ namespace Api_Midasoft.Controllers
                 return InternalServerError(ex);
             }
 
-        }
-        //Peticion que me trae los registros por cedula de usuarios
         [HttpGet]
         public async Task<IHttpActionResult> GetById(string usuario)
         {
@@ -57,18 +55,11 @@ namespace Api_Midasoft.Controllers
                 if (usuarios == null)
                     return NotFound();
 
-                var usuariosDTO = mapper.Map<usuariosDTO>(usuarios);
-                _logger.Information("Petición exitosa a GetById Usuarios");
-                return Ok(usuariosDTO);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Petición fallida a GetById Usuraios: {MensajeDeError}", ex.Message);
-                return InternalServerError(ex);
-            }
+            var usuariosDTO = mapper.Map<usuariosDTO>(usuarios);
 
+            return Ok(usuariosDTO);
         }
-        //Peticion que me inserta registro de usuarios
+
         [HttpPost]
         public async Task<IHttpActionResult> Insert(usuariosDTO usuariosDTO)
         {
@@ -89,7 +80,7 @@ namespace Api_Midasoft.Controllers
             }
 
         }
-        //Peticion que me actualiza registro por cedula de usuarios
+
         [HttpPut]
         public async Task<IHttpActionResult> Update(usuariosDTO usuariosDTO, string usuario)
         {
@@ -120,7 +111,7 @@ namespace Api_Midasoft.Controllers
             }
 
         }
-        //Peticion que me elimina registro por cedula de usuarios
+
         [HttpDelete]
         public async Task<IHttpActionResult> Delete(string usuario)
         {

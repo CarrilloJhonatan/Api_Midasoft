@@ -31,7 +31,7 @@ namespace Api_Midasoft.Controllers
             HttpStatusCode statusCode;
             string token;
 
-            // determine whether a jwt exists or not
+            // determinar si un jwt existe o no
             if (!TryRetrieveToken(request, out token))
             {
                 statusCode = HttpStatusCode.Unauthorized;
@@ -57,7 +57,7 @@ namespace Api_Midasoft.Controllers
                     IssuerSigningKey = securityKey
                 };
 
-                // Extract and assign Current Principal and user
+                // Extraer y asignar Principal y usuario actual
                 Thread.CurrentPrincipal = tokenHandler.ValidateToken(token, validationParameters, out securityToken);
                 HttpContext.Current.User = tokenHandler.ValidateToken(token, validationParameters, out securityToken);
 
